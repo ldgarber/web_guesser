@@ -5,7 +5,8 @@ require 'sinatra/reloader'
 @@guesses = 5
 
 get '/' do
-    guess = params['guess']
+    guess = params[:guess]
+    cheat = params[:cheat]
     message2 = ""
     if guess
         message = check_guess(guess)
@@ -17,7 +18,13 @@ get '/' do
         message = "Guess the number from 0-100 in 5 guesses!"
         color = "#FFFFFF"
     end
-    erb :index, :locals => {:message => message, :color => color, :message2 => message2}
+    if cheat
+        cheatmessage = "(Psst. It's #{@@secret_number})"
+    else
+        cheatmessage = ""
+    end
+    erb :index, :locals => {:message => message, :color => color, :message2 => message2, :cheatmessage => cheatmessage}
+
 end
 
 def check_guess(guess)
